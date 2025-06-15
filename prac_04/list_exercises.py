@@ -24,10 +24,12 @@ def main():
 def populate_numbers():
     """gets user to input 5 numbers and adds them to list"""
     numbers = []
-    for i in range(0, 5): # i is not used. Is there a better way to do this without creating an obsolete variable?
-        number = int(input("Enter number: ")) # get number from user
-        numbers.append(number) # add number to list
-    return numbers # return list
+    number = int(input("Enter number 1: "))# loop until user gives negative
+    while number >= 0:
+        numbers.append(number) # store each number in list
+        number = int(input(f"Enter number {len(numbers)+1}: ")) # the number being given (1st 2nd 3...)
+                                                                # increases with numbers len
+    return numbers
 
 def is_authorised_user():
     """is user inputted username in authorised user list"""
