@@ -1,7 +1,7 @@
 """
 Intermediate Exercise - languages
 Guess time: 15m
-Actual time:
+Actual time: 16m
 """
 from programming_language import ProgrammingLanguage
 
