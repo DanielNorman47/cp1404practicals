@@ -5,11 +5,12 @@ Actual time:
 """
 
 import datetime
+import project
 
 from prac_03.capitalist_conrad import out_file
 
 DEFAULT_FILE = "projects.txt"
-CHOICE_MESSAGE = "Select a Menu" \
+CHOICE_MESSAGE = "Select a Menu\n" \
                  "L - Load Projects\nS - Save Projects\n" \
                  "D - Display Projects\nF - Filter Projects\n" \
                  "A - Add Project\nU - Update Project\n" \
@@ -17,7 +18,7 @@ CHOICE_MESSAGE = "Select a Menu" \
 
 
 def main():
-    projects = [] # will NOT be global but most funcs will need access to it
+    projects = []  # will NOT be global but most funcs will need access to it
     get_projects_from_file(projects, DEFAULT_FILE)
     choice = input(CHOICE_MESSAGE).upper()  # The desired selected menu
     while choice != "Q":
@@ -26,7 +27,7 @@ def main():
         elif choice == "S":
             save_projects(projects)
         elif choice == "D":
-            display_projects()
+            display_projects(projects)
         elif choice == "F":
             filter_projects()
         elif choice == "A":
@@ -50,16 +51,18 @@ def get_projects_from_file(projects, file_name):
             priority = int(parts[2])
             cost_estimate = float(parts[3])
             completion_percentage = float(parts[4])
-            projects.append((name, start_date, priority, cost_estimate, completion_percentage))
+            projects.append(project.Project(name, start_date, priority, cost_estimate, completion_percentage))
+
 
 def give_projects_to_file(projects, file_name):
     """get projects from list and add to file"""
     with open(file_name, "w") as output_file:
-        print("Name	Start Date  Priority	Cost Estimate	Completion Percentage", file=output_file) # add header
-        for project in projects:
-            date = datetime.datetime.strftime(project[1], "%d/%m/%Y")
-            line = "\t".join([project[0],date , project[2], project[3], project[4]])
-            print(line,file=output_file)
+        print("Name	Start Date  Priority	Cost Estimate	Completion Percentage", file=output_file)  # add header
+        for project_object in projects:
+            date = datetime.datetime.strftime(project_object.start_date, "%d/%m/%Y")
+            line = "\t".join([project_object.name, date, project_object.priority, project_object.cost_estimate, project_object.completion_percentage])
+            print(line, file=output_file)
+
 
 def load_projects(projects):
     """get user file name and send to get_projects_from_file"""
@@ -73,8 +76,9 @@ def save_projects(projects):
     give_projects_to_file(projects, file_name)
 
 
-def display_projects():
-    pass
+def display_projects(projects):
+    for i, project_object in enumerate(projects):
+        print(f"{i+1} - {project_object}")
 
 
 def filter_projects():

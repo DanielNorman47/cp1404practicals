@@ -11,6 +11,10 @@ class Project:
         self.cost_estimate = cost_estimate
         self.completion_percentage = completion_percentage
 
+
+    def __str__(self):
+        return f"{self.name}, {self.start_date.strftime("%d/%m/%Y")}, {self.priority}, {self.cost_estimate}, {self.completion_percentage}"
+
     def __lt__(self, other):
         """less than, used for sorting projects"""
         return self.start_date < other.start_date
