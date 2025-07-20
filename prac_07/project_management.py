@@ -1,7 +1,7 @@
 """
 Project Management exercise
 Guess time: 45m   ->  changed to 1.5 hours 23 minutes in
-Actual time:
+Actual time: 2:02
 """
 
 import datetime
