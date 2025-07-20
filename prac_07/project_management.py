@@ -7,10 +7,9 @@ Actual time:
 import datetime
 import project
 
-from prac_03.capitalist_conrad import out_file
 
 DEFAULT_FILE = "projects.txt"
-CHOICE_MESSAGE = "Select a Menu\n" \
+CHOICE_MESSAGE = "\n\nSelect a Menu\n" \
                  "L - Load Projects\nS - Save Projects\n" \
                  "D - Display Projects\nF - Filter Projects\n" \
                  "A - Add Project\nU - Update Project\n" \
@@ -18,7 +17,7 @@ CHOICE_MESSAGE = "Select a Menu\n" \
 
 
 def main():
-    projects = []  # will NOT be global but most funcs will need access to it
+    projects = []  # Will NOT be global but most funcs will need access to it
     get_projects_from_file(projects, DEFAULT_FILE)
     choice = input(CHOICE_MESSAGE).upper()  # The desired selected menu
     while choice != "Q":
@@ -37,15 +36,18 @@ def main():
         else:
             print("Invalid menu choice")
         choice = input(CHOICE_MESSAGE).upper()
-    # To save or not to save TODO
+    # To save or not to save
+    if "save" == input('Type "save" to save projects file to default file: ').lower():
+        give_projects_to_file(projects, DEFAULT_FILE)
+
 
 
 def get_projects_from_file(projects, file_name):
     """get projects from file and add to list"""
     with open(file_name, "r") as file:
-        file.readline()  # skip header
+        file.readline()  # Skip header
         for line in file:
-            parts = line.split("\t")  # split by the tabs
+            parts = line.split("\t")  # Split by the tabs
             name = parts[0]
             start_date = datetime.datetime.strptime(parts[1], "%d/%m/%Y").date()  # get date in date object format
             priority = int(parts[2])
@@ -60,7 +62,8 @@ def give_projects_to_file(projects, file_name):
         print("Name	Start Date  Priority	Cost Estimate	Completion Percentage", file=output_file)  # add header
         for project_object in projects:
             date = datetime.datetime.strftime(project_object.start_date, "%d/%m/%Y")
-            line = "\t".join([project_object.name, date, project_object.priority, project_object.cost_estimate, project_object.completion_percentage])
+            line = "\t".join([project_object.name, date, str(project_object.priority), str(project_object.cost_estimate),
+                              str(project_object.completion_percentage)])
             print(line, file=output_file)
 
 
@@ -76,7 +79,7 @@ def save_projects(projects):
     give_projects_to_file(projects, file_name)
 
 
-def display_projects(projects, index=False): # index is if it should display an index
+def display_projects(projects, index=False):  # Index is if it should display an index
     """display all projects with an index"""
     for i, project_object in enumerate(projects):
         print(f"{(i + 1) if index else ""} - {project_object}")
@@ -95,34 +98,37 @@ def get_date_from_user():
     """get datetime.date formated date from user"""
     return datetime.datetime.strptime(input("Date (d/m/yyyy): "), "%d/%m/%Y").date()
 
+
 def add_project(projects):
     """get user input to add a project to list"""
-    name = input("Name: ")  # for while loop condition
-    guitars = []
+    name = input("Name: ")  # For while loop condition
     while name != "":
         start_date = get_date_from_user()
         priority = int(input("Priority: "))
         cost = float(input("Cost Estimate: $"))
         percentage = int(input("Percentage: %"))
-        guitars.append(project.Project(name, start_date, priority, cost, percentage))
-        name = input("Name: ")  # loop to next project or quit
+        projects.append(project.Project(name, start_date, priority, cost, percentage))
+        name = input("Name: ")  # Loop to next project or quit
 
 
 def update_project(projects):
     """update completion% and priority"""
-    display_projects(projects)
+    display_projects(projects, True)
     index = int(input("Select Project Index(1, 2, 3...: ")) - 1
-    priority = f"Set {projects[index].name}'s priority to\ne.g. 1,2,3 or string for no change: "
+
+    # For changing priority
+    priority = input(f"Set {projects[index].name}'s priority to\ne.g. 1,2,3 or string for no change: ")
     try:
         projects[index].priority = int(priority)
     except ValueError:
         print("Priority was not changed")
 
-    percentage = f"Set {projects[index].name}'s priority to\ne.g. 1,2,3 or string for no change: "
+    # For changing percentage
+    percentage = input(f"Set {projects[index].name}'s percentage to\ne.g. 1,2,3 or string for no change: ")
     try:
-        projects[index].priority = int(percentage)
+        projects[index].completion_percentage = int(percentage)
     except ValueError:
-        print("Priority was not changed")
+        print("Percentage Complete was not changed")
 
 
 main()
