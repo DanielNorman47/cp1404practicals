@@ -27,17 +27,17 @@ def main():
         elif choice == "S":
             save_projects(projects)
         elif choice == "D":
-            display_projects(projects)
+            display_projects(projects, True)
         elif choice == "F":
-            filter_projects()
+            filter_projects(projects)
         elif choice == "A":
-            add_project()
+            add_project(projects)
         elif choice == "U":
-            update_project()
+            update_project(projects)
         else:
             print("Invalid menu choice")
         choice = input(CHOICE_MESSAGE).upper()
-    # To save or not to save
+    # To save or not to save TODO
 
 
 def get_projects_from_file(projects, file_name):
@@ -76,30 +76,53 @@ def save_projects(projects):
     give_projects_to_file(projects, file_name)
 
 
-def display_projects(projects):
+def display_projects(projects, index=False): # index is if it should display an index
+    """display all projects with an index"""
     for i, project_object in enumerate(projects):
-        print(f"{i+1} - {project_object}")
+        print(f"{(i + 1) if index else ""} - {project_object}")
 
 
-def filter_projects():
-    pass
+def filter_projects(projects):
+    """get date from user, get projects after date, sort projects by date, display projects"""
+    date = get_date_from_user()
+    print(date)
+    projects_after = [project_object for project_object in projects if project_object.is_start_after_date(date)]
+    projects_after.sort()
+    display_projects(projects_after)
 
 
-def add_project():
-    pass
+def get_date_from_user():
+    """get datetime.date formated date from user"""
+    return datetime.datetime.strptime(input("Date (d/m/yyyy): "), "%d/%m/%Y").date()
+
+def add_project(projects):
+    """get user input to add a project to list"""
+    name = input("Name: ")  # for while loop condition
+    guitars = []
+    while name != "":
+        start_date = get_date_from_user()
+        priority = int(input("Priority: "))
+        cost = float(input("Cost Estimate: $"))
+        percentage = int(input("Percentage: %"))
+        guitars.append(project.Project(name, start_date, priority, cost, percentage))
+        name = input("Name: ")  # loop to next project or quit
 
 
-def update_project():
-    pass
+def update_project(projects):
+    """update completion% and priority"""
+    display_projects(projects)
+    index = int(input("Select Project Index(1, 2, 3...: ")) - 1
+    priority = f"Set {projects[index].name}'s priority to\ne.g. 1,2,3 or string for no change: "
+    try:
+        projects[index].priority = int(priority)
+    except ValueError:
+        print("Priority was not changed")
 
+    percentage = f"Set {projects[index].name}'s priority to\ne.g. 1,2,3 or string for no change: "
+    try:
+        projects[index].priority = int(percentage)
+    except ValueError:
+        print("Priority was not changed")
 
-# name = input("Name: ")  # for while loop condition
-# guitars = []
-# while name != "":
-#     year = int(input("Year: "))
-#     cost = int(input("Cost: ").replace("$", ""))
-#
-#     guitars.append(Guitar(name, year, cost))
-#     name = input("Name: ")  # loop to next guitar or quit
 
 main()

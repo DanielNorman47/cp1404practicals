@@ -19,3 +19,6 @@ class Project:
         """less than, used for sorting projects"""
         return self.start_date < other.start_date
 
+    def is_start_after_date(self, date):
+        """return if self is after date (not on)"""
+        return self.start_date > date
