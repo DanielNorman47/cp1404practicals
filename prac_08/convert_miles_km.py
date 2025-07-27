@@ -11,18 +11,28 @@ class MilesToKm(App):
         """convert miles to km"""
         km_label = self.root.ids.km # store the field object for easier reading
         miles_field = self.root.ids.miles
-        km_label.text = str(int(miles_field.text) * 1.60934)
+        try:
+            km_label.text = str(int(miles_field.text) * 1.60934)
+        except ValueError:
+            km_label.text = "0"
+            miles_field.text = "0"
         pass
 
     def handle_up(self):
         """up button"""
         miles_field = self.root.ids.miles # store the field object for easier reading
-        miles_field.text = str(int(miles_field.text) + 1)
+        try:
+            miles_field.text = str(int(miles_field.text) + 1)
+        except ValueError:
+            miles_field.text = "1"
 
     def handle_down(self):
         """down button"""
         miles_field = self.root.ids.miles # store the field object for easier reading
-        miles_field.text = str(int(miles_field.text) - 1)
+        try:
+            miles_field.text = str(int(miles_field.text) - 1)
+        except ValueError:
+            miles_field.text = "-1"
 
 
 MilesToKm().run()
