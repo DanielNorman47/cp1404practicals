@@ -1,0 +1,21 @@
+BoxLayout:
+    orientation: 'vertical'
+    BoxLayout:
+        orientation: 'horizontal'
+        TextInput:
+            size_hint_x: 5
+            id: miles
+            text: '0'
+            on_text: app.handle_convert()
+            multiline: False
+        BoxLayout:
+            orientation: 'vertical'
+            Button:
+                on_press: app.handle_up()
+                text: 'Up'
+            Button:
+                on_press: app.handle_down()
+                text: 'Down'
+    Label:
+        id: km
+        text: '0'
