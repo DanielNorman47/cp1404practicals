@@ -12,7 +12,7 @@ class SilverServiceTaxi(Taxi):
 
     def get_fare(self):
         """add the flag fall to the fare price."""
-        return super().get_fare() + self.flagfall
+        return super().get_fare() + (self.flagfall if (super().get_fare()>0) else 0)
 
     def __str__(self):
         """add the flag fall to the description"""
